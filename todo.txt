@@ -1,0 +1,13 @@
+TODO :
+
+add option to change runner (for every game?)
+
+stop the user from clicking the db button more than once (maybe completely change this ; button dissapers after the table is created)
+
+add list with games thumbnails
+
+implement frames for hopefully better widget managment
+
+check all user inputs if they are right
+
+add indicator that a game is running
