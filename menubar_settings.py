@@ -1,8 +1,9 @@
 import tkinter as tk
 import subprocess
 import webbrowser
-import sqlite
+import sqlitee
 import re
+import main
 
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
@@ -86,7 +87,7 @@ def auth_button():
         auth_not_succesful_try_again.grid(row=1, column=0)
 
 def change_globalrunner_submit_button_func():
-    import sqlite
+    import sqlitee
     input_entry_change_globalrunner = entry_change_runner.get()
     print(input_entry_change_globalrunner)
     topwindow_change_runner.destroy()
@@ -95,8 +96,8 @@ def change_globalrunner_submit_button_func():
         data)
     # "INSERT INTO games(gamename, codename) VALUES (?,?);", (title, app_id))
 
-    sqlite.cur.execute(sql_update_query)
-    sqlite.conn.commit()
+    main.cur.execute(sql_update_query)
+    main.conn.commit()
 
 
 def change_globalrunner():
