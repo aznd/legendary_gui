@@ -11,3 +11,5 @@ implement frames for hopefully better widget managment
 check all user inputs if they are right
 
 add indicator that a game is running
+
+add proper way to check if user is logged in

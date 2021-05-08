@@ -1,8 +1,8 @@
 import tkinter as tk
 import subprocess
 import webbrowser
-import sqlitee
 import re
+import os
 import main
 
 color_light_black = "#2f2f2f"
@@ -14,7 +14,7 @@ def callback(url):
     webbrowser.open_new(url)
 
 
-file_loc = '/home/jack/Development/gui_legendary/is_auth_complete.txt'
+file_loc = '/home/jack/legendary_gui/is_auth_complete.txt'
 
 
 def topwindow_settings():
@@ -44,17 +44,19 @@ def topwindow_settings():
     entry_for_token = tk.Entry(
         settings_window, bg=color_light_black, fg=color_white)
     entry_for_token.grid(row=3, column=0)
-    txtfile = open(file_loc, 'r')
-    filecontent = txtfile.read()
-    if filecontent == "complete":
+    
+    # NEW WAY TO CHECK IF USER IS ALREADY LOGGED IN
+    auth_check = os.path.isfile('/home/jack/.config/legendary/user.json')
+    if auth_check == True:
         auth_already_complete = tk.Label(
             settings_window, bg=color_light_black, text="You are already connected with your Epic Games Account!", fg=color_white)
         auth_already_complete.grid(row=5, column=0)
-    elif filecontent == "not complete":
+    elif auth_check == False:
         auth_not_complete = tk.Label(
-            settings_window, text="You are currently not connected to our Epic Games Account!", bg=color_light_black, fg=color_white)
+            settings_window, text="You are currently not connected to a Epic Games Account!", bg=color_light_black, fg=color_white)
         auth_not_complete.grid(row=5, column=0)
-    txtfile.close()
+
+
     button_change_runner = tk.Button(
         settings_window, text="Click", command=lambda: change_globalrunner())
     button_change_runner.grid(row=3, column=2)
@@ -87,7 +89,6 @@ def auth_button():
         auth_not_succesful_try_again.grid(row=1, column=0)
 
 def change_globalrunner_submit_button_func():
-    import sqlitee
     input_entry_change_globalrunner = entry_change_runner.get()
     print(input_entry_change_globalrunner)
     topwindow_change_runner.destroy()

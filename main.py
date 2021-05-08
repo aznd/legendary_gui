@@ -4,7 +4,6 @@ import tkinter as tk
 import os
 import menubar_settings
 import sqlite3
-import sqlitee
 import game_import
 import re
 from PIL import ImageTk, Image
@@ -51,7 +50,7 @@ def convertTuple(tup):
 def launch_game():
     for i in listbox_all_games.curselection():
         sel_game = listbox_all_games.get(i)
-    conn = sqlite3.connect('/home/jack/Development/gui_legendary/data.db')
+    conn = sqlite3.connect('/home/jack/legendary_gui/data.db')
     cur = conn.cursor()
     cur.execute("SELECT app_id FROM games WHERE title=?", (sel_game,))
     finalthing2 = cur.fetchone()
@@ -108,7 +107,7 @@ def get_owned_games_sqlite():
         cur.execute(
             "INSERT INTO games(title, app_id) VALUES (?,?);", (title, app_id))
     # sqlite.conn.execute("INSERT INTO games(gamename) VALUES ('done')")
-    sqlitee.conn.commit()
+    conn.commit()
 
 
 
@@ -158,15 +157,30 @@ import_games_btn = tk.Button(frame_right, text="Import a game",
                              command=lambda: game_import.topwindow_import_game())
 import_games_btn.grid(row=1, column=0, padx=0, pady=0)
 
-change_runner_single_button = tk.Button(root, text="Change the runner for a specific game", command = lambda: change_single_game())
-change_runner_single_button.grid(row=2, column = 2)
+change_runner_single_button = tk.Button(root, text="Change the runner for a specific game", command = lambda: change_single_runner())
+change_runner_single_button.grid(row=2, column = 1)
 
 # CHANGE RUNNER FOR A SINGLE GAME
-def change_single_game():
+def change_single_runner():
+    global entry_change_single
+    global toplevel_change_single_game
     toplevel_change_single_game = tk.Toplevel()
     toplevel_change_single_game.wm_title("Change runner for specific game")
+    button_submit_change_single = tk.Button(toplevel_change_single_game, text="Submit new runner", command = lambda : submit_change_single())
+    button_submit_change_single.grid(row=0, column = 3)
+    entry_change_single = tk.Entry(toplevel_change_single_game)
+    entry_change_single.grid(row = 0, column = 0)
+    listbox_all_games = tk.Listbox(toplevel_change_single_game)
+    listbox_all_games.grid(row=0, column = 1)
+    
+    
+def submit_change_single():
+    entry_change_single_content = entry_change_single.get()
+    toplevel_change_single_game.destroy()
+
     
 
+    
     
 
 
