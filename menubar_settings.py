@@ -3,7 +3,7 @@ import subprocess
 import webbrowser
 import re
 import os
-import main
+import sqlitee
 
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
@@ -97,8 +97,8 @@ def change_globalrunner_submit_button_func():
         data)
     # "INSERT INTO games(gamename, codename) VALUES (?,?);", (title, app_id))
 
-    main.cur.execute(sql_update_query)
-    main.conn.commit()
+    sqlitee.cur.execute(sql_update_query)
+    sqlitee.conn.commit()
 
 
 def change_globalrunner():

@@ -3,23 +3,15 @@ import subprocess
 import tkinter as tk
 import os
 import menubar_settings
-import sqlite3
 import game_import
 import re
+import sqlitee
+import sqlite3
 from PIL import ImageTk, Image
 from tkinter.filedialog import askopenfilename
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
 
-conn = sqlite3.connect('/home/jack/legendary_gui/data.db')
-cur = conn.cursor()
-#cur.execute("""CREATE TABLE games (title str, app_id str)""")
-#cur.execute("ALTER TABLE games ADD COLUMN 'runner' TEXT")
-#cur.execute("INSERT INTO games (title) VALUES ('globalrunner');")
-# conn.commit()
-
-cur.execute("INSERT INTO games (runner) VALUES ('/usr/bin/wine');")
-conn.commit()
 root = tk.Tk()
 root.geometry("1300x800")
 root.title("gui_legendary")
@@ -69,8 +61,8 @@ listbox_all_games.grid(row=1, column=0)
 listbox_all_games.bind('<Double-1>', lambda x: launch_game())
 x = 1
 #lines = output_list_games.split('\n')
-cur.execute("SELECT title from games")
-title_db = cur.fetchall()
+sqlitee.cur.execute("SELECT title from games")
+title_db = sqlitee.cur.fetchall()
 for items in title_db:
     listbox_all_games.insert('end', items[0])
 
@@ -104,10 +96,10 @@ def get_owned_games_sqlite():
         app_id = match.group('appId')
         # UNUSED, MAYBE IN THE FUTURE THIS WILL BE USED
         # version = match.group('version')
-        cur.execute(
+        sqlitee.cur.execute(
             "INSERT INTO games(title, app_id) VALUES (?,?);", (title, app_id))
     # sqlite.conn.execute("INSERT INTO games(gamename) VALUES ('done')")
-    conn.commit()
+    sqlitee.conn.commit()
 
 
 
@@ -133,9 +125,9 @@ widget_list_installed_games['state'] = 'disabled'
 # FUNCTION TO CHANGE GLOBAL RUNNER
 def change_global_runner_func():
     file_globalrunner_chosen = askopenfilename()
-    cur.execute(
+    sqlitee.cur.execute(
         "UPDATE games SET runner = (?) WHERE title = 'globalrunner';", (file_globalrunner_chosen,))
-    conn.commit()
+    sqlitee.conn.commit()
 
 
 # WIDGET TO CHANGE THE GLOBAL RUNNER
@@ -160,29 +152,38 @@ import_games_btn.grid(row=1, column=0, padx=0, pady=0)
 change_runner_single_button = tk.Button(root, text="Change the runner for a specific game", command = lambda: change_single_runner())
 change_runner_single_button.grid(row=2, column = 1)
 
+
+
 # CHANGE RUNNER FOR A SINGLE GAME
 def change_single_runner():
     global entry_change_single
     global toplevel_change_single_game
+    global listbox_all_games2
     toplevel_change_single_game = tk.Toplevel()
     toplevel_change_single_game.wm_title("Change runner for specific game")
-    button_submit_change_single = tk.Button(toplevel_change_single_game, text="Submit new runner", command = lambda : submit_change_single())
+    button_submit_change_single = tk.Button(toplevel_change_single_game, text="Submit new runner", command = lambda: submit_change_single())
     button_submit_change_single.grid(row=0, column = 3)
-    entry_change_single = tk.Entry(toplevel_change_single_game)
-    entry_change_single.grid(row = 0, column = 0)
-    listbox_all_games = tk.Listbox(toplevel_change_single_game)
-    listbox_all_games.grid(row=0, column = 1)
     
+    listbox_all_games2 = tk.Listbox(toplevel_change_single_game)
+    listbox_all_games2.grid(row=0, column = 1)
+    for items in title_db:
+        listbox_all_games2.insert('end', items[0])
+    
+
+
     
 def submit_change_single():
-    entry_change_single_content = entry_change_single.get()
+    global listbox_all_games2
+    selection_game = listbox_all_games2.get(listbox_all_games2.curselection())
+    file_new_single_runner = askopenfilename()
     toplevel_change_single_game.destroy()
+    sqlitee.cur.execute("UPDATE games SET runner = ? WHERE title = (?)", (file_new_single_runner, selection_game))
+    sqlitee.conn.commit()
+
+
 
     
 
-    
-    
 
-
-root.config(menu=menubar)
+root.config(menu = menubar)
 root.mainloop()
