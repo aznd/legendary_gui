@@ -42,16 +42,16 @@ def convertTuple(tup):
 def launch_game():
     for i in listbox_all_games.curselection():
         sel_game = listbox_all_games.get(i)
-    conn = sqlite3.connect('/home/jack/legendary_gui/data.db')
-    cur = conn.cursor()
-    cur.execute("SELECT app_id FROM games WHERE title=?", (sel_game,))
-    finalthing2 = cur.fetchone()
-    cur.execute("SELECT runner FROM games WHERE title=?", ('globalrunner',))
-    sel_global_runner = cur.fetchone()
-    str_converted_runner = convertTuple(sel_global_runner)
+    sqlitee.cur.execute("SELECT app_id FROM games WHERE title=?", (sel_game,))
+    finalthing2 = sqlitee.cur.fetchone()
     str_converted_sel_game = convertTuple(finalthing2)
+    sqlitee.cur.execute("SELECT runner FROM games WHERE app_id=?", (str_converted_sel_game,))
+    runner_sqlite = sqlitee.cur.fetchone()
+    print(runner_sqlite)
+    runner_final = convertTuple(runner_sqlite)
+    print(str_converted_sel_game, runner_final)
     subprocess.Popen(
-        ['legendary', 'launch', str_converted_sel_game, '--wine', str_converted_runner])
+        ['legendary', 'launch', str_converted_sel_game, '--wine', runner_final])
 
 
 # LISTBOX FOR ALL GAMES
@@ -156,7 +156,6 @@ change_runner_single_button.grid(row=2, column = 1)
 
 # CHANGE RUNNER FOR A SINGLE GAME
 def change_single_runner():
-    global entry_change_single
     global toplevel_change_single_game
     global listbox_all_games2
     toplevel_change_single_game = tk.Toplevel()
