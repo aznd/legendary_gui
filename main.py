@@ -47,9 +47,7 @@ def launch_game():
     str_converted_sel_game = convertTuple(finalthing2)
     sqlitee.cur.execute("SELECT runner FROM games WHERE app_id=?", (str_converted_sel_game,))
     runner_sqlite = sqlitee.cur.fetchone()
-    print(runner_sqlite)
     runner_final = convertTuple(runner_sqlite)
-    print(str_converted_sel_game, runner_final)
     subprocess.Popen(
         ['legendary', 'launch', str_converted_sel_game, '--wine', runner_final])
 
