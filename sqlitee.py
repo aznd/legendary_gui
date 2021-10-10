@@ -1,5 +1,5 @@
 import sqlite3
-conn = sqlite3.connect('/home/jack/legendary_gui/data.db')
+conn = sqlite3.connect('data.db')
 cur = conn.cursor()
 
 # SOME EXAMPLES HOW TO WORK WITH SQLITE

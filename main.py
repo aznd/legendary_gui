@@ -15,7 +15,7 @@ color_white = "#ffffff"
 root = tk.Tk()
 root.geometry("1300x800")
 root.title("gui_legendary")
-root.iconphoto(True, tk.PhotoImage(file='/home/jack/legendary_gui/icon.png'))
+root.iconphoto(True, tk.PhotoImage(file='/home/user/legendary_gui/icon.png'))
 root.configure(bg=color_light_black)
 
 
