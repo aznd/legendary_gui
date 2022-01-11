@@ -6,8 +6,6 @@ import menubar_settings
 import game_import
 import re
 import sqlitee
-import sqlite3
-from PIL import ImageTk, Image
 from tkinter.filedialog import askopenfilename
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
@@ -59,6 +57,12 @@ listbox_all_games.grid(row=1, column=0)
 listbox_all_games.bind('<Double-1>', lambda x: launch_game())
 x = 1
 #lines = output_list_games.split('\n')
+try:
+    sqlitee.cur.execute("SELECT title from games")
+except Exception:
+    print("Something went wrong with the database...")
+    
+
 sqlitee.cur.execute("SELECT title from games")
 title_db = sqlitee.cur.fetchall()
 for items in title_db:

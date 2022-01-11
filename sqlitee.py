@@ -1,6 +1,7 @@
 import sqlite3
 conn = sqlite3.connect('data.db')
 cur = conn.cursor()
+cur.execute("CREATE TABLE IF NOT EXISTS games (title str, app_id str, runner str)")
 
 # SOME EXAMPLES HOW TO WORK WITH SQLITE
 #cur.execute("""CREATE TABLE games (title str, app_id str)""")
