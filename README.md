@@ -18,18 +18,18 @@ Import an already downloaded game
 More is coming!
 
 ### TODO: 
-[ ] if a game doesnt has a specific runner selected, it will not launch. so, check if a game has a specific runner selected, if not, use the globalrunner
+- [ ] If a game doesnt has a specific runner selected, it will not launch. so, check if a game has a specific runner selected, if not, use the globalrunner
 
-[ ] Stop the user from clicking the db button more than once (maybe completely change this ; button dissapers after the table is created)
+- [ ] Stop the user from clicking the db button more than once (maybe completely change this ; button dissapers after the table is created)
 
-[ ] Add list with games thumbnails
+- [ ] Add list with games thumbnails
 
-[ ] Check all user inputs if they are right
+- [ ] Check all user inputs if they are right
 
-[ ] Add indicator that a game is running
+- [ ] Add indicator that a game is running
 
-[ ] Add proper way to check if user is logged in (DONE!)
+- [X] Add proper way to check if user is logged in
 
-[ ] Implement frames for hopefully better widget managment (DONE!)
+- [X] Implement frames for hopefully better widget managment
 
-[ ] Add option to change runner for every game (DONE!) 
+- [X] Add option to change runner for every game
