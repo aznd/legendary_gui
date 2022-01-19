@@ -17,9 +17,7 @@ get_games_in_db_text = """Get your games into the db. \n
 
 
 class App:
-    def __init__(self, geometry, title, listbox_all_games, title_db):
-        self.geometry = geometry
-        self.title = title
+    def __init__(self, listbox_all_games, title_db):
         self.listbox_all_games = listbox_all_games
         self.title_db = title_db
 
@@ -192,5 +190,5 @@ class App:
         database_sql.conn.commit()
 
 
-app = App()
+app = App(None, None)
 app.setup()
