@@ -5,7 +5,7 @@ import os
 import menubar_settings
 import game_import
 import re
-import sqlitee
+import database_sql
 import logging
 from tkinter.filedialog import askopenfilename
 
@@ -51,8 +51,8 @@ class App:
         self.listbox_all_games.bind('<Double-1>', lambda x: self.launch_game())
 
         # Unsorted things
-        sqlitee.cur.execute("SELECT title from games")
-        self.title_db = sqlitee.cur.fetchall()
+        database_sql.cur.execute("SELECT title from games")
+        self.title_db = database_sql.cur.fetchall()
         for items in self.title_db:
             self.listbox_all_games.insert('end', items[0])
         text_hint_launch = tk.Label(
@@ -110,9 +110,13 @@ class App:
         widget_list_installed_games.insert("1.0", output_list_installed_games)
         widget_list_installed_games['state'] = 'disabled'
 
+        # Main Loop
+        root.config(menu=menubar)
+        root.mainloop()
+
     def setupsql(self):
         try:
-            sqlitee.cur.execute("SELECT title from games")
+            database_sql.cur.execute("SELECT title from games")
         except Exception:
             print("Something went wrong with the database...")
 
@@ -124,12 +128,12 @@ class App:
     def launch_game(self):
         for i in self.listbox_all_games.curselection():
             sel_game = self.listbox_all_games.get(i)
-        sqlitee.cur.execute(f"SELECT app_id FROM games WHERE title={sel_game}")
-        finalthing2 = sqlitee.cur.fetchone()
+        database_sql.cur.execute(f"SELECT app_id FROM games WHERE title={sel_game}")
+        finalthing2 = database_sql.cur.fetchone()
         str_converted_sel_game = self.convertTuple(finalthing2)
-        sqlitee.cur.execute(
+        database_sql.cur.execute(
             f"SELECT runner FROM games WHERE app_id={str_converted_sel_game}")
-        runner_sqlite = sqlitee.cur.fetchone()
+        runner_sqlite = database_sql.cur.fetchone()
         runner_final = self.convertTuple(runner_sqlite)
         subprocess.Popen(
             ['legendary', 'launch', str_converted_sel_game, '--wine', runner_final])
@@ -151,16 +155,16 @@ class App:
             app_id = match.group('appId')
             # UNUSED, MAYBE IN THE FUTURE THIS WILL BE USED
             # version = match.group('version')
-            sqlitee.cur.execute(
+            database_sql.cur.execute(
                 f"INSERT INTO games(title, app_id) VALUES ({title},{app_id});")
-        sqlitee.conn.commit()
+        database_sql.conn.commit()
 
     # FUNCTION TO CHANGE GLOBAL RUNNER
     def change_global_runner_func(self):
         file_globalrunner_chosen = askopenfilename()
-        sqlitee.cur.execute(
+        database_sql.cur.execute(
             f"UPDATE games SET runner=({file_globalrunner_chosen}) WHERE title='globalrunner';")
-        sqlitee.conn.commit()
+        database_sql.conn.commit()
 
     # CHANGE RUNNER FOR A SINGLE GAME
     def change_single_runner(self):
@@ -184,10 +188,9 @@ class App:
         selection_game = listbox_all_games2.get(listbox_all_games2.curselection())
         file_new_single_runner = askopenfilename()
         toplevel_change_single_game.destroy()
-        sqlitee.cur.execute("UPDATE games SET runner = ? WHERE title = (?)",
-                            (file_new_single_runner, selection_game))
-        sqlitee.conn.commit()
+        database_sql.cur.execute(f"UPDATE games SET runner = {file_new_single_runner} WHERE title = {selection_game}")
+        database_sql.conn.commit()
 
 
-root.config(menu=menubar)
-root.mainloop()
+app = App()
+app.setup()
