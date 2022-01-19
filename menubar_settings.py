@@ -3,17 +3,16 @@ import subprocess
 import webbrowser
 import re
 import os
-import sqlitee
+import database_sql
 
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
 color_light_blue = "#63b8ff"
 file_loc = './is_auth_complete.txt'
 
+
 def callback(url):
     webbrowser.open_new(url)
-
-
 
 
 def topwindow_settings():
@@ -78,14 +77,18 @@ def auth_button():
         with subprocess.Popen(['legendary', 'auth'], stdin=subprocess.PIPE, text=True) as popen:
             popen.communicate(str(entry))
         auth_succesfull_toplevel = tk.Toplevel()
-        auth_succesfull_label = tk.Label(auth_succesfull_toplevel, text="Successfully logged in!")
-        auth_succesfull_label.grid(row=0,column=0)
+        auth_succesfull_label = tk.Label(auth_succesfull_toplevel,
+                                         text="Successfully logged in!")
+        auth_succesfull_label.grid(row=0, column=0)
     else:
         auth_not_succesful = tk.Toplevel()
-        auth_not_succesful_label = tk.Label(auth_not_succesful, text="Something went wrong")
-        auth_not_succesful_label.grid(row=0,column=0)
-        auth_not_succesful_try_again = tk.Button(auth_not_succesful, text="Try Again", command=lambda:topwindow_settings())
+        auth_not_succesful_label = tk.Label(auth_not_succesful,
+                                            text="Something went wrong")
+        auth_not_succesful_label.grid(row=0, column=0)
+        auth_not_succesful_try_again = tk.Button(auth_not_succesful, text="Try Again",
+                                                 command=lambda: topwindow_settings())
         auth_not_succesful_try_again.grid(row=1, column=0)
+
 
 def change_globalrunner_submit_button_func():
     input_entry_change_globalrunner = entry_change_runner.get()
@@ -96,8 +99,8 @@ def change_globalrunner_submit_button_func():
         data)
     # "INSERT INTO games(gamename, codename) VALUES (?,?);", (title, app_id))
 
-    sqlitee.cur.execute(sql_update_query)
-    sqlitee.conn.commit()
+    database_sql.cur.execute(sql_update_query)
+    database_sql.conn.commit()
 
 
 def change_globalrunner():

@@ -18,6 +18,8 @@ Import an already downloaded game
 More is coming!
 
 ### TODO: 
+- [ ] Clean up a lot more, since this was one of my first projects
+
 - [ ] If a game doesnt has a specific runner selected, it will not launch. so, check if a game has a specific runner selected, if not, use the globalrunner
 
 - [ ] Stop the user from clicking the db button more than once (maybe completely change this ; button dissapers after the table is created)
