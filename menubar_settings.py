@@ -8,13 +8,12 @@ import sqlitee
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
 color_light_blue = "#63b8ff"
-
+file_loc = './is_auth_complete.txt'
 
 def callback(url):
     webbrowser.open_new(url)
 
 
-file_loc = '/home/jack/legendary_gui/is_auth_complete.txt'
 
 
 def topwindow_settings():

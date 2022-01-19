@@ -17,5 +17,19 @@ Import an already downloaded game
 
 More is coming!
 
-### Check the [todo.txt](https://github.com/azndd/legendary_gui/blob/master/todo.txt) file to see whats coming and what will be changed in the future!
+### TODO: 
+[ ] if a game doesnt has a specific runner selected, it will not launch. so, check if a game has a specific runner selected, if not, use the globalrunner
 
+[ ] Stop the user from clicking the db button more than once (maybe completely change this ; button dissapers after the table is created)
+
+[ ] Add list with games thumbnails
+
+[ ] Check all user inputs if they are right
+
+[ ] Add indicator that a game is running
+
+[ ] Add proper way to check if user is logged in (DONE!)
+
+[ ] Implement frames for hopefully better widget managment (DONE!)
+
+[ ] Add option to change runner for every game (DONE!) 

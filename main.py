@@ -7,77 +7,88 @@ import game_import
 import re
 import sqlitee
 from tkinter.filedialog import askopenfilename
+
 color_light_black = "#2f2f2f"
 color_white = "#ffffff"
-
-root = tk.Tk()
-root.geometry("1300x800")
-root.title("gui_legendary")
-root.iconphoto(True, tk.PhotoImage(file='./icon.png'))
-root.configure(bg=color_light_black)
+get_games_in_db_text = """Get your games into the db. \n
+                          (Don't click this more than once,
+                          have to change this)"""
 
 
+class App:
+    def __init__(self, geometry, title, listbox_all_games) -> None:
+        self.geometry = geometry
+        self.title = title
+        self.listbox_all_games = listbox_all_games
 
-# FRAMES
-frame_left = tk.Frame(root, bg=color_light_black)
-frame_left.grid(row=0, column=0, pady=0, padx=0)
-frame_right = tk.Frame(root, highlightbackground = "white",
-                       bg=color_light_black,
-                       borderwidth=4)
-frame_right.grid(row=0, column=1, pady=0, padx=0)
+    def setup(self):
+        root = tk.Tk()
+        root.geometry("1300x800")
+        root.title("Legendary GUI")
+        root.iconphoto(True, tk.PhotoImage(file="./icon.png"))
 
-# GETTING OWNED GAMES IN DB
-refresh_button = tk.Button(
-    frame_right, text="Get your games into the db. \n(Don't click this more than once, have to change this)",
-    command=lambda: get_owned_games_sqlite())
-refresh_button.grid(row=2, column=0)
+        # FRAMES
+        frame_left = tk.Frame(root, bg=color_light_black)
+        frame_left.grid(row=0, column=0, pady=0, padx=0)
+        frame_right = tk.Frame(root, highlightbackground="white",
+                               bg=color_light_black,
+                               borderwidth=4)
+        frame_right.grid(row=0, column=1, pady=0, padx=0)
 
-# FUNCTION FOR THE LAUNCH GAME BUTTON
-def convertTuple(tup):
-    str = ''.join(tup)
-    return str
+        refresh_button = tk.Button(frame_right,
+                                   text=get_games_in_db_text,
+                                   command=lambda: get_owned_games_sqlite())
+        refresh_button.grid(row=2, column=0)
 
-def launch_game():
-    for i in listbox_all_games.curselection():
-        sel_game = listbox_all_games.get(i)
-    sqlitee.cur.execute("SELECT app_id FROM games WHERE title=?", (sel_game,))
-    finalthing2 = sqlitee.cur.fetchone()
-    str_converted_sel_game = convertTuple(finalthing2)
-    sqlitee.cur.execute("SELECT runner FROM games WHERE app_id=?", (str_converted_sel_game,))
-    runner_sqlite = sqlitee.cur.fetchone()
-    runner_final = convertTuple(runner_sqlite)
-    subprocess.Popen(
-        ['legendary', 'launch', str_converted_sel_game, '--wine', runner_final])
+        # LISTBOX FOR ALL GAMES
+        self.listbox_all_games = tk.Listbox(frame_left,
+                                            selectmode="SINGLE",
+                                            bg=color_light_black,
+                                            fg=color_white, height=38, width=50)
+        self.listbox_all_games.grid(row=1, column=0)
+        self.listbox_all_games.bind('<Double-1>', lambda x: self.launch_game())
+
+        # Unsorted things
+        sqlitee.cur.execute("SELECT title from games")
+        title_db = sqlitee.cur.fetchall()
+        for items in title_db:
+            self.listbox_all_games.insert('end', items[0])
+        text_hint_launch = tk.Label(frame_left, text="To launch a game, double click on it.")
+        text_hint_launch.grid(row=0, column=0, pady=10)
+
+        """for line in lines:
+            match = re.match(
+                r'^ \* (?P<title>.*) \(App name: (?P<appId>.*) \| Version: (?P<version>.*)\)$', line)
+            if not match:
+                continue
+            title = match.group('title')
+        app_id = match.group('appId')"""
 
 
-# LISTBOX FOR ALL GAMES
-listbox_all_games = tk.Listbox(frame_left, selectmode="SINGLE", bg=color_light_black,
-                               fg=color_white, height=38, width=50)
-listbox_all_games.grid(row=1, column=0)
-listbox_all_games.bind('<Double-1>', lambda x: launch_game())
-x = 1
-#lines = output_list_games.split('\n')
-try:
-    sqlitee.cur.execute("SELECT title from games")
-except Exception:
-    print("Something went wrong with the database...")
-    
+    def setupsql(self):
+        try:
+            sqlitee.cur.execute("SELECT title from games")
+        except Exception:
+            print("Something went wrong with the database...")
 
-sqlitee.cur.execute("SELECT title from games")
-title_db = sqlitee.cur.fetchall()
-for items in title_db:
-    listbox_all_games.insert('end', items[0])
+    # Maybe this could be solved by just using the str() func?
+    def convertTuple(self, tup):
+        string = ''.join(tup)
+        return string
 
-text_hint_launch = tk.Label(frame_left, text = "To launch a game, double click on it.")
-text_hint_launch.grid(row=0, column = 0, pady = 10)
+    def launch_game(self):
+        for i in self.listbox_all_games.curselection():
+            sel_game = self.listbox_all_games.get(i)
+        sqlitee.cur.execute(f"SELECT app_id FROM games WHERE title={sel_game}")
+        finalthing2 = sqlitee.cur.fetchone()
+        str_converted_sel_game = self.convertTuple(finalthing2)
+        sqlitee.cur.execute(f"SELECT runner FROM games WHERE app_id={str_converted_sel_game}")
+        runner_sqlite = sqlitee.cur.fetchone()
+        runner_final = self.convertTuple(runner_sqlite)
+        subprocess.Popen(
+            ['legendary', 'launch', str_converted_sel_game, '--wine', runner_final])
 
-#for line in lines:
-#    match = re.match(
-#        r'^ \* (?P<title>.*) \(App name: (?P<appId>.*) \| Version: (?P<version>.*)\)$', line)
-#    if not match:
-#        continue
-#    title = match.group('title')
-#app_id = match.group('appId')
+
 
 
 # FUNCTION FOR GETTING GAMES INTO THE DB
