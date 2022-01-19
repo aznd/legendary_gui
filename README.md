@@ -1,6 +1,9 @@
 ## legendary_gui
 A GUI for legendary written in python
 
+### How to run:
+Just run the main.py file
+
 ### Currently you can:
 
 Log in with your Epic Games Account
