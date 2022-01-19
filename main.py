@@ -26,7 +26,10 @@ class App:
         root = tk.Tk()
         root.geometry("1300x800")
         root.title("Legendary GUI")
-        root.iconphoto(True, tk.PhotoImage(file="/home/user/legendary_gui/icon.png"))
+        try:
+            root.iconphoto(True, tk.PhotoImage(file="./icon.png"))
+        except tk.TclError:
+            logging.log(logging.ERROR, "Could not find the icon.png file.")
 
         # FRAMES
         frame_left = tk.Frame(root, bg=color_light_black)
