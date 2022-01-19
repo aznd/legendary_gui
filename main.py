@@ -14,6 +14,7 @@ color_white = "#ffffff"
 get_games_in_db_text = """Get your games into the db. \n
                           (Don't click this more than once,
                           have to change this)"""
+logging.basicConfig(level=logging.WARNING)
 
 
 class App:
@@ -25,7 +26,10 @@ class App:
         root = tk.Tk()
         root.geometry("1300x800")
         root.title("Legendary GUI")
-        root.iconphoto(True, tk.PhotoImage(file="./icon.png"))
+        try:
+            root.iconphoto(True, tk.PhotoImage(file="./icon.png"))
+        except tk.TclError:
+            logging.log(logging.ERROR, "Could not find the icon.png file.")
 
         # FRAMES
         frame_left = tk.Frame(root, bg=color_light_black)
