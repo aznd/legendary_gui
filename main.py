@@ -150,7 +150,7 @@ class App:
         lines = output_list_games.split('\n')
         for line in lines:
             match = re.match(
-                fr'^ \* (?P<title>.*) \(App name: (?P<appId>.*) \| Version: (?P<version>.*)\){line}')
+                r'^ \* (?P<title>.*) \(App name: (?P<appId>.*) \| Version: (?P<version>.*)\)$', line)
             if not match:
                 continue
             title = match.group('title')
@@ -158,7 +158,7 @@ class App:
             # UNUSED, MAYBE IN THE FUTURE THIS WILL BE USED
             # version = match.group('version')
             database_sql.cur.execute(
-                f"INSERT INTO games(title, app_id) VALUES ({title},{app_id});")
+                "INSERT INTO games(title, app_id) VALUES (?,?);", (title, app_id))
         database_sql.conn.commit()
 
     # FUNCTION TO CHANGE GLOBAL RUNNER
