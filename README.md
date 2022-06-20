@@ -1,3 +1,5 @@
+# DISCONTINUED; I NOW CONTRIBUTE TO RARE
+
 ## legendary_gui
 A GUI for legendary written in python
 
