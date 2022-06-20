@@ -1,4 +1,4 @@
-# DISCONTINUED; I NOW CONTRIBUTE TO RARE
+# DISCONTINUED; I NOW CONTRIBUTE TO <a href=https://github.com/Dummerle/Rare>Rare</a>
 
 ## legendary_gui
 A GUI for legendary written in python
